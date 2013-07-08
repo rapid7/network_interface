@@ -8,6 +8,23 @@ RSpec.configure do |config|
 end
 
 if RUBY_PLATFORM =~ /i386-mingw32/
+  def windows_interface_names
+    interfaces = NetworkInterface.interfaces
+    interface_names = begin
+      h = {}
+      interfaces.each do |interface|
+        info = NetworkInterface.interface_info(interface)
+        name = if info && info.has_key?('name')
+          info['name']
+        else
+          interface
+        end
+        h[name] = interface
+      end
+      h
+    end
+    interface_names
+  end
   def system_interfaces
     ipconfig = `ipconfig`
     ipconfig_array = ipconfig.split("\n").select {|s| !s.empty?}
@@ -23,7 +40,7 @@ if RUBY_PLATFORM =~ /i386-mingw32/
         end
       elsif element[/Windows IP Configuration/]
       elsif element[/Ethernet adapter (.*):/]
-        @key = $1
+        @key = windows_interface_names[$1]
         interfaces[@key] = {}
       else
         @key = element[/(.*):/,1]
