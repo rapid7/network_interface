@@ -34,7 +34,7 @@ if RUBY_PLATFORM =~ /i386-mingw32/
     getmac_array = getmac.split("\n").reject {|s| s.empty?}
     getmac_array.map!{|element| element.split(" ")}
     getmac_hash = getmac_array.inject({}) do |hash, array|
-      hash.merge!({array[1][/\{(.*)\}/,1] => array[0]})
+      hash.merge!({array[1][/\{(.*)\}/,1] => array[0].gsub("-",":")})
     end
     
     interfaces = {}
