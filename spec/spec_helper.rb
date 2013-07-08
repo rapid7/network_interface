@@ -61,7 +61,7 @@ if RUBY_PLATFORM =~ /i386-mingw32/
     interfaces
   end
 
-else
+else 
   def system_interfaces
     ifconfig = `/sbin/ifconfig`
     ifconfig_array = ifconfig.split("\n")
@@ -70,23 +70,30 @@ else
     interfaces = {}
     @key = nil
     ifconfig_array.each do |element|
-      if element.start_with? "\t"
+      if element.start_with?("\t") || element.start_with?(" ")
         case element
-        when /\tether (.*) /
+        when /ether ((\w{2}\:){5}(\w{2}))/
           interfaces[@key][:mac] = $1
-        when /\tinet6 (.*) prefixlen/
+        when /inet6 (.*) prefixlen/
           interfaces[@key][:ipv6] = $1
-        when /\inet (.*) netmask (.*) broadcast (.*)/
+        when /inet ((\d{1,3}\.){3}\d{1,3}).*broadcast ((\d{1,3}\.){3}\d{1,3})/
+          interfaces[@key][:ipv4] = $1
+          interfaces[@key][:broadcast] = $3
+        when /addr:((\d{1,3}\.){3}\d{1,3})\s+Bcast:((\d{1,3}\.){3}\d{1,3})/i
           interfaces[@key][:ipv4] = $1
           interfaces[@key][:broadcast] = $3
         end
       else
-        @key = element.split(':').first
+        @key = element.split(' ').first[/(\w*)/,1]
         interfaces[@key] = {}
+        if element[/HWaddr ((\w{2}\:){5}(\w{2}))/]
+          interfaces[@key][:mac] = $1
+        end
       end
     end
     interfaces
   end
+
 end
 
 def system_interfaces_with_addresses
