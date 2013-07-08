@@ -28,7 +28,15 @@ end
 if RUBY_PLATFORM =~ /i386-mingw32/
   def system_interfaces
     ipconfig = `ipconfig`
-    ipconfig_array = ipconfig.split("\n").select {|s| !s.empty?}
+    ipconfig_array = ipconfig.split("\n").reject {|s| s.empty?}
+    
+    getmac = `getmac -nh`
+    getmac_array = getmac.split("\n").reject {|s| s.empty?}
+    getmac_array.map!{|element| element.split(" ")}
+    getmac_hash = getmac_array.inject({}) do |hash, array|
+      hash.merge!({array[1][/\{(.*)\}/,1] => array[0]})
+    end
+    
     interfaces = {}
     @key = nil
     ipconfig_array.each do |element|
@@ -38,6 +46,7 @@ if RUBY_PLATFORM =~ /i386-mingw32/
           # interfaces[@key][:ipv6] = $1
         when /IPv4 Address.*: (.*)/
           interfaces[@key][:ipv4] = $1
+          interfaces[@key][:mac] = getmac_hash[@key[/\{(.*)\}/,1]]
         end
       elsif element[/Windows IP Configuration/]
       elsif element[/Ethernet adapter (.*):/]
@@ -48,6 +57,7 @@ if RUBY_PLATFORM =~ /i386-mingw32/
         interfaces[@key] = {}
       end
     end
+    
     interfaces
   end
 
