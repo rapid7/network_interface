@@ -826,4 +826,183 @@ Init_network_interface_ext()
 	rb_define_module_function(rb_cNetworkInterface, "addresses", rbnetifaces_s_addresses, 1);
 	rb_define_module_function(rb_cNetworkInterface, "interface_info", rbnetifaces_s_interface_info, 1);
 	
+	//constants
+	// Address families (auto-detect using #ifdef)
+
+	#ifdef AF_INET
+		rb_define_const(rb_cNetworkInterface, "AF_INET", INT2NUM(AF_INET));
+	#endif
+	#ifdef AF_INET6
+		rb_define_const(rb_cNetworkInterface, "AF_INET6", INT2NUM(AF_INET6));
+	#endif
+	#ifdef AF_UNSPEC
+		rb_define_const(rb_cNetworkInterface, "AF_UNSPEC", INT2NUM(AF_UNSPEC));
+	#endif
+	#ifdef AF_UNIX
+		rb_define_const(rb_cNetworkInterface, "AF_UNIX", INT2NUM(AF_UNIX));
+	#endif
+	#ifdef AF_FILE
+		rb_define_const(rb_cNetworkInterface, "AF_FILE", INT2NUM(AF_FILE));
+	#endif
+	#ifdef AF_AX25
+		rb_define_const(rb_cNetworkInterface, "AF_AX25", INT2NUM(AF_AX25));
+	#endif
+	#ifdef AF_IMPLINK
+		rb_define_const(rb_cNetworkInterface, "AF_IMPLINK", INT2NUM(AF_IMPLINK));
+	#endif
+	#ifdef AF_PUP
+		rb_define_const(rb_cNetworkInterface, "AF_PUP", INT2NUM(AF_PUP));
+	#endif
+	#ifdef AF_CHAOS
+		rb_define_const(rb_cNetworkInterface, "AF_CHAOS", INT2NUM(AF_CHAOS));
+	#endif
+	#ifdef AF_NS
+		rb_define_const(rb_cNetworkInterface, "AF_NS", INT2NUM(AF_NS));
+	#endif
+	#ifdef AF_ISO
+		rb_define_const(rb_cNetworkInterface, "AF_ISO", INT2NUM(AF_ISO));
+	#endif
+	#ifdef AF_ECMA
+		rb_define_const(rb_cNetworkInterface, "AF_ECMA", INT2NUM(AF_ECMA));
+	#endif
+	#ifdef AF_DATAKIT
+		rb_define_const(rb_cNetworkInterface, "AF_DATAKIT", INT2NUM(AF_DATAKIT));
+	#endif
+	#ifdef AF_CCITT
+		rb_define_const(rb_cNetworkInterface, "AF_CCITT", INT2NUM(AF_CCITT));
+	#endif
+	#ifdef AF_SNA
+		rb_define_const(rb_cNetworkInterface, "AF_SNA", INT2NUM(AF_SNA));
+	#endif
+	#ifdef AF_DECnet
+		rb_define_const(rb_cNetworkInterface, "AF_DECnet", INT2NUM(AF_DECnet));
+	#endif
+	#ifdef AF_DLI
+		rb_define_const(rb_cNetworkInterface, "AF_DLI", INT2NUM(AF_DLI));
+	#endif
+	#ifdef AF_LAT
+		rb_define_const(rb_cNetworkInterface, "AF_LAT", INT2NUM(AF_LAT));
+	#endif
+	#ifdef AF_HYLINK
+		rb_define_const(rb_cNetworkInterface, "AF_HYLINK", INT2NUM(AF_HYLINK));
+	#endif
+	#ifdef AF_APPLETALK
+		rb_define_const(rb_cNetworkInterface, "AF_APPLETALK", INT2NUM(AF_APPLETALK));
+	#endif
+	#ifdef AF_ROUTE
+		rb_define_const(rb_cNetworkInterface, "AF_ROUTE", INT2NUM(AF_ROUTE));
+	#endif
+	#ifdef AF_LINK
+		rb_define_const(rb_cNetworkInterface, "AF_LINK", INT2NUM(AF_LINK));
+	#endif
+	#ifdef AF_PACKET
+		rb_define_const(rb_cNetworkInterface, "AF_PACKET", INT2NUM(AF_PACKET));
+	#endif
+	#ifdef AF_COIP
+		rb_define_const(rb_cNetworkInterface, "AF_COIP", INT2NUM(AF_COIP));
+	#endif
+	#ifdef AF_CNT
+		rb_define_const(rb_cNetworkInterface, "AF_CNT", INT2NUM(AF_CNT));
+	#endif
+	#ifdef AF_IPX
+		rb_define_const(rb_cNetworkInterface, "AF_IPX", INT2NUM(AF_IPX));
+	#endif
+	#ifdef AF_SIP
+		rb_define_const(rb_cNetworkInterface, "AF_SIP", INT2NUM(AF_SIP));
+	#endif
+	#ifdef AF_NDRV
+		rb_define_const(rb_cNetworkInterface, "AF_NDRV", INT2NUM(AF_NDRV));
+	#endif
+	#ifdef AF_ISDN
+		rb_define_const(rb_cNetworkInterface, "AF_ISDN", INT2NUM(AF_ISDN));
+	#endif
+	#ifdef AF_NATM
+		rb_define_const(rb_cNetworkInterface, "AF_NATM", INT2NUM(AF_NATM));
+	#endif
+	#ifdef AF_SYSTEM
+		rb_define_const(rb_cNetworkInterface, "AF_SYSTEM", INT2NUM(AF_SYSTEM));
+	#endif
+	#ifdef AF_NETBIOS
+		rb_define_const(rb_cNetworkInterface, "AF_NETBIOS", INT2NUM(AF_NETBIOS));
+	#endif
+	#ifdef AF_NETBEUI
+		rb_define_const(rb_cNetworkInterface, "AF_NETBEUI", INT2NUM(AF_NETBEUI));
+	#endif
+	#ifdef AF_PPP
+		rb_define_const(rb_cNetworkInterface, "AF_PPP", INT2NUM(AF_PPP));
+	#endif
+	#ifdef AF_ATM
+		rb_define_const(rb_cNetworkInterface, "AF_ATM", INT2NUM(AF_ATM));
+	#endif
+	#ifdef AF_ATMPVC
+		rb_define_const(rb_cNetworkInterface, "AF_ATMPVC", INT2NUM(AF_ATMPVC));
+	#endif
+	#ifdef AF_ATMSVC
+		rb_define_const(rb_cNetworkInterface, "AF_ATMSVC", INT2NUM(AF_ATMSVC));
+	#endif
+	#ifdef AF_NETGRAPH
+		rb_define_const(rb_cNetworkInterface, "AF_NETGRAPH", INT2NUM(AF_NETGRAPH));
+	#endif
+	#ifdef AF_VOICEVIEW
+		rb_define_const(rb_cNetworkInterface, "AF_VOICEVIEW", INT2NUM(AF_VOICEVIEW));
+	#endif
+	#ifdef AF_FIREFOX
+		rb_define_const(rb_cNetworkInterface, "AF_FIREFOX", INT2NUM(AF_FIREFOX));
+	#endif
+	#ifdef AF_UNKNOWN1
+		rb_define_const(rb_cNetworkInterface, "AF_UNKNOWN1", INT2NUM(AF_UNKNOWN1));
+	#endif
+	#ifdef AF_BAN
+		rb_define_const(rb_cNetworkInterface, "AF_BAN", INT2NUM(AF_BAN));
+	#endif
+	#ifdef AF_CLUSTER
+		rb_define_const(rb_cNetworkInterface, "AF_CLUSTER", INT2NUM(AF_CLUSTER));
+	#endif
+	#ifdef AF_12844
+		rb_define_const(rb_cNetworkInterface, "AF_12844", INT2NUM(AF_12844));
+	#endif
+	#ifdef AF_IRDA
+		rb_define_const(rb_cNetworkInterface, "AF_IRDA", INT2NUM(AF_IRDA));
+	#endif
+	#ifdef AF_NETDES
+		rb_define_const(rb_cNetworkInterface, "AF_NETDES", INT2NUM(AF_NETDES));
+	#endif
+	#ifdef AF_NETROM
+		rb_define_const(rb_cNetworkInterface, "AF_NETROM", INT2NUM(AF_NETROM));
+	#endif
+	#ifdef AF_BRIDGE
+		rb_define_const(rb_cNetworkInterface, "AF_BRIDGE", INT2NUM(AF_BRIDGE));
+	#endif
+	#ifdef AF_X25
+		rb_define_const(rb_cNetworkInterface, "AF_X25", INT2NUM(AF_X25));
+	#endif
+	#ifdef AF_ROSE
+		rb_define_const(rb_cNetworkInterface, "AF_ROSE", INT2NUM(AF_ROSE));
+	#endif
+	#ifdef AF_SECURITY
+		rb_define_const(rb_cNetworkInterface, "AF_SECURITY", INT2NUM(AF_SECURITY));
+	#endif
+	#ifdef AF_KEY
+		rb_define_const(rb_cNetworkInterface, "AF_KEY", INT2NUM(AF_KEY));
+	#endif
+	#ifdef AF_NETLINK
+		rb_define_const(rb_cNetworkInterface, "AF_NETLINK", INT2NUM(AF_NETLINK));
+	#endif
+	#ifdef AF_ASH
+		rb_define_const(rb_cNetworkInterface, "AF_ASH", INT2NUM(AF_ASH));
+	#endif
+	#ifdef AF_ECONET
+		rb_define_const(rb_cNetworkInterface, "AF_ECONET", INT2NUM(AF_ECONET));
+	#endif
+	#ifdef AF_PPPOX
+		rb_define_const(rb_cNetworkInterface, "AF_PPPOX", INT2NUM(AF_PPPOX));
+	#endif
+	#ifdef AF_WANPIPE
+		rb_define_const(rb_cNetworkInterface, "AF_WANPIPE", INT2NUM(AF_WANPIPE));
+	#endif
+	#ifdef AF_BLUETOOTH
+		rb_define_const(rb_cNetworkInterface, "AF_BLUETOOTH", INT2NUM(AF_BLUETOOTH));
+	#endif
+	
 }
+
