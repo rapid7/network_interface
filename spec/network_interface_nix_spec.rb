@@ -38,7 +38,16 @@ describe NetworkInterface do
             end
           end          
         end
-        
+        if hash.has_key?(:mac)
+          describe "MAC address" do
+            it "should have a MAC address" do
+              NetworkInterface.addresses(interface).should have_key NetworkInterface::AF_LINK
+            end
+            it "should match the system interface" do
+              NetworkInterface.addresses(interface)[NetworkInterface::AF_LINK][0]["addr"].should == hash[:mac]
+            end
+          end
+        end
       end
     end
     
