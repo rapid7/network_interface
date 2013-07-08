@@ -34,7 +34,7 @@ if RUBY_PLATFORM =~ /i386-mingw32/
       if element.start_with? " "
         case element
         when /IPv6 Address.*: (.*)/
-          interfaces[@key][:ipv6] = $1
+          # interfaces[@key][:ipv6] = $1
         when /IPv4 Address.*: (.*)/
           interfaces[@key][:ipv4] = $1
         end
