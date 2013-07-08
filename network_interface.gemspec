@@ -7,12 +7,15 @@ Gem::Specification.new do |spec|
   spec.name          = "network_interface"
   spec.version       = NetworkInterface::VERSION
   spec.authors       = ["Brandon Turner", "Lance Sanchez"]
-  spec.email         = ["lance.sanchez@rapid7.com"]
-  spec.summary       = "A cross platform gem to help get interface information"
-  spec.description   = "This gem was originally added to the Metasploit Pcaprub gem. I have spun this out into its own gem for anyone who might want to programmatically get information on their network interfaces"
+  spec.email         = ["lance.sanchez@rapid7.com", "brandon_turner@rapid7.com"]
+  spec.summary       = "A cross platform gem to help get network interface information"
+  spec.description   = %q{
+     This gem was originally added to the Metasploit Pcaprub gem. It's been spun
+     out into its own gem for anyone who might want to programmatically get
+     information on their network interfaces. }
   spec.homepage      = "https://github.com/rapid7/network_interface"
   spec.license       = "MIT"
-  
+
   spec.files         = `git ls-files`.split($/)
   spec.extensions    = ['ext/network_interface_ext/extconf.rb']
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
