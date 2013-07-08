@@ -7,7 +7,7 @@ describe NetworkInterface do
       NetworkInterface.interfaces
     end
     it "should have the same interfaces as the system_interfaces" do
-      NetworkInterface.interfaces.should include(*system_interfaces.keys)
+      NetworkInterface.interfaces.should include(*system_interfaces_with_addresses.keys)
     end
   end
   
