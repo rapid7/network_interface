@@ -33,9 +33,9 @@ if RUBY_PLATFORM =~ /i386-mingw32/
     ipconfig_array.each do |element|
       if element.start_with? " "
         case element
-        when /IPv6 Address.*:(.*)/
+        when /IPv6 Address.*: (.*)/
           interfaces[@key][:ipv6] = $1
-        when /IPv4 Address.*:(.*)/
+        when /IPv4 Address.*: (.*)/
           interfaces[@key][:ipv4] = $1
         end
       elsif element[/Windows IP Configuration/]
