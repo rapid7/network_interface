@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = NetworkInterface::VERSION
   spec.authors       = ["Brandon Turner", "Lance Sanchez"]
   spec.email         = ["lance.sanchez@rapid7.com"]
-  spec.description   = "Moving the netifaces from metasploit framework into its own gem"
-  spec.summary       = "Moving the netifaces from metasploit framework into its own gem"
-  spec.homepage      = ""
+  spec.summary       = "A cross platform gem to help get interface information"
+  spec.description   = "This gem was originally added to the Metasploit Pcaprub gem. I have spun this out into its own gem for anyone who might want to programmatically get information on their network interfaces"
+  spec.homepage      = "https://github.com/rapid7/network_interface"
   spec.license       = "MIT"
   
   spec.files         = `git ls-files`.split($/)
