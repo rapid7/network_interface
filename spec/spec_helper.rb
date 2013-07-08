@@ -9,7 +9,7 @@ end
 
 def friendly_interface_names
   interfaces = NetworkInterface.interfaces
-  interface_names = begin
+  interface_names ||= begin
     h = {}
     interfaces.each do |interface|
       info = NetworkInterface.interface_info(interface)
@@ -24,7 +24,6 @@ def friendly_interface_names
   end
   interface_names
 end
-
 
 if RUBY_PLATFORM =~ /i386-mingw32/
   def system_interfaces

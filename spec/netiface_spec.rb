@@ -10,7 +10,7 @@ describe NetworkInterface do
   
   describe "#addresses" do
     system_interfaces_with_addresses.each do |interface, hash|
-      describe "#{interface}" do
+      describe "#{friendly_interface_names.key(interface)}" do
         if hash.has_key?(:ipv4)
           describe "ipv4" do
             it "should have an ipv4 address" do
