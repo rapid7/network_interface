@@ -677,7 +677,7 @@ rbnetifaces_s_interfaces (VALUE self)
     return Qnil;
   }
 
-  *pfreq = ifc.CNAME(ifc_req);
+  pfreq = ifc.CNAME(ifc_req);
 
   for (n = 0; n < ifc.CNAME(ifc_len)/sizeof(struct CNAME(ifreq));n++,pfreq++)
   {
