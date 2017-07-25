@@ -30,6 +30,7 @@
 /* For Linux, include all the sockaddr
    definitions we can lay our hands on. */
 #if !HAVE_SOCKADDR_SA_LEN
+#    include <netinet/in.h>
 #  if HAVE_NETASH_ASH_H
 #    include <netash/ash.h>
 #  endif
