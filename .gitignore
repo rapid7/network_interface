@@ -7,5 +7,6 @@ rdoc
 pkg
 tmp
 *.so
+*.gem
 .ruby-gemset
 .ruby-version
