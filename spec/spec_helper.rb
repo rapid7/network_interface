@@ -2,6 +2,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 require 'network_interface'
 require 'rspec'
+require 'pry'
 require 'rspec/autorun'
 
 RSpec.configure do |config|
@@ -29,14 +30,14 @@ if RUBY_PLATFORM =~ /i386-mingw32/
   def system_interfaces
     ipconfig = `ipconfig`
     ipconfig_array = ipconfig.split("\n").reject {|s| s.empty?}
-    
+
     getmac = `getmac -nh`
     getmac_array = getmac.split("\n").reject {|s| s.empty?}
     getmac_array.map!{|element| element.split(" ")}
     getmac_hash = getmac_array.inject({}) do |hash, array|
       hash.merge!({array[1][/\{(.*)\}/,1] => array[0].gsub("-",":").downcase})
     end
-    
+
     interfaces = {}
     @key = nil
     ipconfig_array.each do |element|
@@ -57,11 +58,11 @@ if RUBY_PLATFORM =~ /i386-mingw32/
         interfaces[@key] = {}
       end
     end
-    
+
     interfaces
   end
 
-else 
+else
   def system_interfaces
     ifconfig = `/sbin/ifconfig`
     ifconfig_array = ifconfig.split("\n")
