@@ -2,7 +2,6 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 require 'network_interface'
 require 'rspec'
-require 'rspec/autorun'
 
 RSpec.configure do |config|
 end
@@ -29,14 +28,14 @@ if RUBY_PLATFORM =~ /i386-mingw32/
   def system_interfaces
     ipconfig = `ipconfig`
     ipconfig_array = ipconfig.split("\n").reject {|s| s.empty?}
-    
+
     getmac = `getmac -nh`
     getmac_array = getmac.split("\n").reject {|s| s.empty?}
     getmac_array.map!{|element| element.split(" ")}
     getmac_hash = getmac_array.inject({}) do |hash, array|
       hash.merge!({array[1][/\{(.*)\}/,1] => array[0].gsub("-",":").downcase})
     end
-    
+
     interfaces = {}
     @key = nil
     ipconfig_array.each do |element|
@@ -57,11 +56,11 @@ if RUBY_PLATFORM =~ /i386-mingw32/
         interfaces[@key] = {}
       end
     end
-    
+
     interfaces
   end
 
-else 
+else
   def system_interfaces
     ifconfig = `/sbin/ifconfig`
     ifconfig_array = ifconfig.split("\n")
@@ -75,12 +74,19 @@ else
         when /ether ((\w{2}\:){5}(\w{2}))/
           interfaces[@key][:mac] = $1
         when /inet6 (.*) prefixlen/
-          interfaces[@key][:ipv6] = $1
+          interfaces[@key][:ipv6] = [] if interfaces[@key][:ipv6].nil?
+          if $1[0..3] == 'fe80'
+            interfaces[@key][:ipv6].append("#{$1.strip}%#{@key}")
+          else
+            interfaces[@key][:ipv6].append($1.strip)
+          end
         when /inet ((\d{1,3}\.){3}\d{1,3}).*broadcast ((\d{1,3}\.){3}\d{1,3})/
-          interfaces[@key][:ipv4] = $1
+          interfaces[@key][:ipv4] = [] if interfaces[@key][:ipv4].nil?
+          interfaces[@key][:ipv4].append($1)
           interfaces[@key][:broadcast] = $3
         when /addr:((\d{1,3}\.){3}\d{1,3})\s+Bcast:((\d{1,3}\.){3}\d{1,3})/i
-          interfaces[@key][:ipv4] = $1
+          interfaces[@key][:ipv4] = [] if interfaces[@key][:ipv4].nil?
+          interfaces[@key][:ipv4].append($1)
           interfaces[@key][:broadcast] = $3
         end
       else
