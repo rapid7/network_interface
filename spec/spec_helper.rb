@@ -2,6 +2,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 require 'network_interface'
 require 'rspec'
+require 'support/matchers'
 
 RSpec.configure do |config|
 end
