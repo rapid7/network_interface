@@ -4,6 +4,14 @@ module NetworkInterfaces
       new(hash["name"], hash["addr"], hash["netmask"], hash["peer"])
     end
 
+    def ipv6?
+      begin
+        IPAddr.new(addr).ipv6?
+      rescue IPAddr::InvalidAddressError => e
+        false
+      end
+    end
+
     def ipv4?
       begin
         IPAddr.new(addr).ipv4?
@@ -14,6 +22,10 @@ module NetworkInterfaces
 
     def local?
       addr[/^127.*/]
+    end
+
+    def blank?
+      addr.nil?
     end
   end
 end
