@@ -6,10 +6,6 @@ module NetworkInterface
       base.extend(ClassMethods)
     end
 
-    def first
-      finder.first
-    end
-
     def filter(q:)
       query = -> address { address.include? q }
       finder.find(&query)
