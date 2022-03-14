@@ -1,4 +1,4 @@
-# NetworkInterface
+# Network Interface
 
 TODO: Write a gem description
 
