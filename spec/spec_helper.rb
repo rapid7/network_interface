@@ -28,21 +28,22 @@ if RUBY_PLATFORM =~ /i386-mingw32/
   def system_interfaces
     ipconfig = `ipconfig`
     ipconfig_array = ipconfig.split("\n").reject {|s| s.empty?}
-    
+
     getmac = `getmac -nh`
     getmac_array = getmac.split("\n").reject {|s| s.empty?}
     getmac_array.map!{|element| element.split(" ")}
     getmac_hash = getmac_array.inject({}) do |hash, array|
       hash.merge!({array[1][/\{(.*)\}/,1] => array[0].gsub("-",":").downcase})
     end
-    
+
     interfaces = {}
     @key = nil
     ipconfig_array.each do |element|
       if element.start_with? " "
         case element
         when /IPv6 Address.*: (.*)/
-          # interfaces[@key][:ipv6] = $1
+          # interfaces[@key][:ipv6] ||= []
+          # interfaces[@key][:ipv6] << $1
         when /IPv4 Address.*: (.*)/
           interfaces[@key][:ipv4] = $1
           interfaces[@key][:mac] = getmac_hash[@key[/\{(.*)\}/,1]]
@@ -56,11 +57,11 @@ if RUBY_PLATFORM =~ /i386-mingw32/
         interfaces[@key] = {}
       end
     end
-    
+
     interfaces
   end
 
-else 
+else
   def system_interfaces
     ifconfig = `/sbin/ifconfig`
     ifconfig_array = ifconfig.split("\n")
@@ -73,9 +74,14 @@ else
         case element
         when /ether ((\w{2}\:){5}(\w{2}))/
           interfaces[@key][:mac] = $1
+        when /inet6 (.*) {2}prefixlen \d+ {2}scopeid 0x20<link>/
+          interfaces[@key][:ipv6] ||= []
+          interfaces[@key][:ipv6] << "#{$1}%#{@key}"
         when /inet6 (.*) prefixlen/
-          interfaces[@key][:ipv6] = $1
+          interfaces[@key][:ipv6] ||= []
+          interfaces[@key][:ipv6] << $1.strip
         when /inet ((\d{1,3}\.){3}\d{1,3}).*broadcast ((\d{1,3}\.){3}\d{1,3})/
+          # TODO: ipv4 can have multiple addresses, similar to ipv6
           interfaces[@key][:ipv4] = $1
           interfaces[@key][:broadcast] = $3
         when /addr:((\d{1,3}\.){3}\d{1,3})\s+Bcast:((\d{1,3}\.){3}\d{1,3})/i

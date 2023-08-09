@@ -7,7 +7,7 @@ describe NetworkInterface do
       expect(NetworkInterface.interfaces).to include(*system_interfaces_with_addresses.keys)
     end
   end
-  
+
   describe "#addresses" do
     system_interfaces_with_addresses.each do |interface, hash|
       describe "#{friendly_interface_names.key(interface)}" do
@@ -17,7 +17,7 @@ describe NetworkInterface do
               expect(NetworkInterface.addresses(interface)).to have_key NetworkInterface::AF_INET
             end
             it "should match the system interface of #{hash[:ipv4]}" do
-              expect(NetworkInterface.addresses(interface)[NetworkInterface::AF_INET][0]["addr"]).to eq hash[:ipv4]
+              expect(NetworkInterface.addresses(interface)[NetworkInterface::AF_INET].map { |v| v["addr"] }).to match_array hash[:ipv4]
             end
           end
         end
@@ -27,9 +27,9 @@ describe NetworkInterface do
               expect(NetworkInterface.addresses(interface)).to have_key NetworkInterface::AF_INET6
             end
             it "should match the system interface of #{hash[:ipv6]}" do
-              expect(NetworkInterface.addresses(interface)[NetworkInterface::AF_INET6][0]["addr"]).to eq hash[:ipv6]
+              expect(NetworkInterface.addresses(interface)[NetworkInterface::AF_INET6].map { |v| v["addr"] }).to match_array hash[:ipv6]
             end
-          end          
+          end
         end
         if hash.has_key?(:mac)
           describe "MAC address" do
@@ -43,6 +43,6 @@ describe NetworkInterface do
         end
       end
     end
-    
+
   end
 end
