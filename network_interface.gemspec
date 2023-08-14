@@ -16,7 +16,11 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/rapid7/network_interface"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files`.split($/)
+  # Specify which files should be added to the gem when it is released.
+  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{\A(?:test|spec|features|tmp)/}) }
+  end
   spec.extensions    = ['ext/network_interface_ext/extconf.rb']
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
