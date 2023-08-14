@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    network_interface (0.0.2)
+    network_interface (0.0.3)
 
 GEM
   remote: https://rubygems.org/
@@ -34,4 +34,4 @@ DEPENDENCIES
   rspec
 
 BUNDLED WITH
-   2.2.9
+   2.1.4
