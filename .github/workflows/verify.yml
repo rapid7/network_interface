@@ -10,41 +10,51 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-18.04
     timeout-minutes: 40
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
+        os:
+          - ubuntu-20.04
         ruby:
-          - 2.5
-          - 2.6
-          - 2.7
-          - 3.0
-        test_cmd:
-          - bundle exec rspec
-
+          - '2.5'
+          - '2.6'
+          - '2.7'
+          - '3.0'
+        include:
+          - { os: ubuntu-latest, ruby: '3.0',  docker_image: 'ruby:3.0' }
     env:
       RAILS_ENV: test
 
-    name: Ruby ${{ matrix.ruby }} - ${{ matrix.test_cmd }}
+    runs-on: ${{ matrix.os }}
+
+    name: Ruby ${{ matrix.ruby }} ${{ matrix.docker_image && 'Docker' || matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup Ruby
+        if: ${{ !matrix.docker_image }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
       - name: Rake Compile with Bundle
+        if: ${{ !matrix.docker_image }}
         run: |
           bundle exec rake compile
 
       - name: ${{ matrix.test_cmd }}
+        if: ${{ !matrix.docker_image }}
         run: |
-          echo "${CMD}"
-          bash -c "${CMD}"
+          bundle exec rspec
+
+      - name: Run tests in docker
+        if: ${{ matrix.docker_image }}
         env:
-          CMD: ${{ matrix.test_cmd }}
+          DOCKER_IMAGE: ${{ matrix.docker_image }}
+        run: |
+          docker network create --ipv6 --subnet 2001:0DB8::/112 ip6net
+          docker run --rm --network ip6net -w $(pwd) -v $(pwd):$(pwd) ${DOCKER_IMAGE} /bin/sh -c "ls -lah; apt update; apt install -y git net-tools; bundle install; bundle exec rake compile; bundle exec rspec"
