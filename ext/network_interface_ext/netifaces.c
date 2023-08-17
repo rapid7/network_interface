@@ -1,6 +1,9 @@
 #include "ruby.h"
 #include "netifaces.h"
 
+VALUE rb_cNetworkInterface;
+VALUE rb_cNetworkInterfaceError;
+
 #if !defined(WIN32)
 #if  !HAVE_GETNAMEINFO
 #undef getnameinfo
@@ -245,7 +248,7 @@ rbnetifaces_s_addresses (VALUE class, VALUE dev)
 
       if (!pAdapterInfo)
       {
-        rb_raise(rb_eRuntimeError, "Unknow error at OS level");
+        rb_raise(rb_cNetworkInterfaceError, "Could not malloc ADAPTER_INFO");
         return Qnil;
     }
     }
@@ -256,7 +259,7 @@ rbnetifaces_s_addresses (VALUE class, VALUE dev)
   {
     if (pAdapterInfo)
       free (pAdapterInfo);
-    rb_raise(rb_eRuntimeError, "Unable to obtain adapter information.");
+    rb_raise(rb_cNetworkInterfaceError, "Unable to obtain adapter information via GetAdaptersInfo");
     return Qnil;
   }
 
@@ -347,7 +350,7 @@ rbnetifaces_s_addresses (VALUE class, VALUE dev)
 #elif HAVE_GETIFADDRS
   if (getifaddrs (&addrs) < 0)
   {
-    rb_raise(rb_eRuntimeError, "Unknow error at OS level");
+    rb_raise(rb_cNetworkInterfaceError, "Unable to retrieve network interface info via getifaddrs");
     }
 
     for (addr = addrs; addr; addr = addr->ifa_next)
@@ -401,7 +404,7 @@ rbnetifaces_s_addresses (VALUE class, VALUE dev)
 
   if (sock < 0)
   {
-        rb_raise(rb_eRuntimeError, "Unknow error at OS level");
+    rb_raise(rb_cNetworkInterfaceError, "Socket not created");
     return Qnil;
   }
 
@@ -530,7 +533,6 @@ rbnetifaces_s_addresses (VALUE class, VALUE dev)
     return Qnil;
 
 }
-
 VALUE
 rbnetifaces_s_interfaces (VALUE self)
 {
@@ -566,7 +568,7 @@ rbnetifaces_s_interfaces (VALUE self)
 
       if (!pAdapterInfo)
       {
-        rb_raise(rb_eRuntimeError, "Unknow error at OS level");
+        rb_raise(rb_cNetworkInterfaceError, "Could not malloc ADAPTER_INFO");
       }
       }
     } while (dwRet == ERROR_BUFFER_OVERFLOW);
@@ -577,7 +579,7 @@ rbnetifaces_s_interfaces (VALUE self)
     if (pAdapterInfo)
       free (pAdapterInfo);
 
-      rb_raise(rb_eRuntimeError, "Unknow error at OS level");
+      rb_raise(rb_cNetworkInterfaceError, "Unable to retrieve adapter info via GetAdaptersInfo");
       return Qnil;
   }
   if (dwRet == ERROR_NO_DATA)
@@ -606,7 +608,7 @@ rbnetifaces_s_interfaces (VALUE self)
 #elif HAVE_GETIFADDRS
   if (getifaddrs (&addrs) < 0)
   {
-    rb_raise(rb_eRuntimeError, "Unknow error at OS level");
+    rb_raise(rb_cNetworkInterfaceError, "Unable to retrieve adapter info via getifaddrs");
   }
 
   for (addr = addrs; addr; addr = addr->ifa_next)
@@ -628,7 +630,7 @@ rbnetifaces_s_interfaces (VALUE self)
   fd = socket (AF_INET, SOCK_DGRAM, 0);
   len = -1;
   if (fd < 0) {
-    rb_raise(rb_eRuntimeError, "Unknow error at OS level");
+    rb_raise(rb_cNetworkInterfaceError, "Error creating socket");
     return Qnil;
   }
 
@@ -661,7 +663,7 @@ rbnetifaces_s_interfaces (VALUE self)
 
   if (!ifc.CNAME(ifc_buf)) {
     close (fd);
-    rb_raise(rb_eRuntimeError, "Not enough memory");
+    rb_raise(rb_cNetworkInterfaceError, "Not enough memory");
     return Qnil;
     }
 
@@ -673,7 +675,7 @@ rbnetifaces_s_interfaces (VALUE self)
 #endif
     free (ifc.CNAME(ifc_req));
     close (fd);
-    rb_raise(rb_eRuntimeError, "Unknow error at OS level");
+    rb_raise(rb_cNetworkInterfaceError, "Unable to calculate buffer size");
     return Qnil;
   }
 
@@ -724,7 +726,7 @@ rbnetifaces_s_interface_info (VALUE self, VALUE dev)
 
       if (!pAdapterInfo)
       {
-        rb_raise(rb_eRuntimeError, "Unknow error at OS level");
+        rb_raise(rb_cNetworkInterfaceError, "Could not malloc ADAPTER_INFO");
       }
       }
     } while (dwRet == ERROR_BUFFER_OVERFLOW);
@@ -735,7 +737,7 @@ rbnetifaces_s_interface_info (VALUE self, VALUE dev)
     if (pAdapterInfo)
       free (pAdapterInfo);
 
-      rb_raise(rb_eRuntimeError, "Unknow error at OS level");
+      rb_raise(rb_cNetworkInterfaceError, "Unable to obtain adapter information via GetAdaptersInfo");
       return Qnil;
   }
   if (dwRet == ERROR_NO_DATA)
@@ -817,11 +819,11 @@ rbnetifaces_s_interface_info (VALUE self, VALUE dev)
   return result;
 }
 
-VALUE rb_cNetworkInterface;
 void
 Init_network_interface_ext()
 {
 	rb_cNetworkInterface = rb_define_module("NetworkInterface");
+	rb_cNetworkInterfaceError = rb_define_class_under(rb_cNetworkInterface, "Error", rb_eRuntimeError);
 	rb_define_module_function(rb_cNetworkInterface, "interfaces", rbnetifaces_s_interfaces, 0);
 	rb_define_module_function(rb_cNetworkInterface, "addresses", rbnetifaces_s_addresses, 1);
 	rb_define_module_function(rb_cNetworkInterface, "interface_info", rbnetifaces_s_interface_info, 1);
