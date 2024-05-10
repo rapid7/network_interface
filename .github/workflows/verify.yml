@@ -32,7 +32,7 @@ jobs:
     name: Ruby ${{ matrix.ruby }} ${{ matrix.docker_image && 'Docker' || matrix.os }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Ruby
         if: ${{ !matrix.docker_image }}
